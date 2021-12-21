@@ -24,6 +24,21 @@
   <ItemGroup>
     <ClInclude Include="src\hook\KeyboardHook.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitattributes" />
+    <None Include=".gitignore" />
+    <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\icon\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources\icon\icon.rc" />
+    <ResourceCompile Include="Resources\manifest\manifest.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="Resources\manifest\XIsTheKey.exe.manifest" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
