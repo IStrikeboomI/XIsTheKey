@@ -1,6 +1,7 @@
 #pragma once
-#include "Windows.h"
+#include <Windows.h>
 #include <memory>
+#include "../sounds/SoundPlayer.h"
 //the virtual key code for X key
 static const int X_KEY = 0x58;
 namespace KeyboardHook {
@@ -15,7 +16,7 @@ namespace KeyboardHook {
             KBDLLHOOKSTRUCT pKeyBoard = *reinterpret_cast<KBDLLHOOKSTRUCT*>(lParam);
             //check for X key
             if (pKeyBoard.vkCode == X_KEY) {
-                
+                SoundPlayer::playThud();
             }
         }
         return CallNextHookEx(0, nCode, wParam, lParam);

@@ -1,0 +1,3 @@
+#include <winres.h>
+
+124 IDR_WAVE1 "thud.wav"
