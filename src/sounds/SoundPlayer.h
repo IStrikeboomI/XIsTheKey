@@ -21,7 +21,7 @@ namespace SoundPlayer {
             PlaySound((LPCUWSTR)lpRes, NULL, SND_MEMORY | SND_ASYNC);
             UnlockResource(hRes);
         }
-        // Free the WAVE resource and return success or failure. 
+        // Free the WAVE resource
         FreeResource(hRes);
 	}
 }
