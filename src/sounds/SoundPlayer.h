@@ -3,7 +3,8 @@
 #pragma comment (lib,"Winmm.lib")
 namespace SoundPlayer {
 	static void playThud() {
-        // Find the WAVE resource. 
+        //Find the WAVE resource.
+		//124 is the resource of the thud sound
         HRSRC hResInfo = FindResource(NULL, MAKEINTRESOURCE(124), TEXT("IDR_WAVE1"));
         //If it doesn't exist then stop
         if (hResInfo == NULL) {
