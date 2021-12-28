@@ -106,10 +106,10 @@ namespace Splash {
         }
         //make all red pixels transparent 
         //this function has to be called for a layered window
-        SetLayeredWindowAttributes(hwnd, RGB(255,0,0), 0, LWA_COLORKEY);
+        SetLayeredWindowAttributes(hwnd, RGB(255, 0, 0), 0, LWA_COLORKEY);
 
         //make window visible
-        ShowWindow(hwnd, SW_SHOWDEFAULT);
+        ShowWindow(hwnd, SW_NORMAL);
         UpdateWindow(hwnd);
 
         SetTimer(hwnd, CLOSE_TIMER, 1000, (TIMERPROC)NULL);
@@ -132,6 +132,7 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
     case WM_TIMER: {
         switch (wparam) {
             case CLOSE_TIMER: {
+                //AnimateWindow(hwnd, 500, AW_HIDE);
                 DestroyWindow(hwnd);
                 KillTimer(hwnd, CLOSE_TIMER);
                 return 0;

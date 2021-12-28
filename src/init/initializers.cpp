@@ -1,6 +1,7 @@
 #include "initializers.h"
 #include "../hook/KeyboardHook.h"
 #include "../splash/Splash.h"
+#include "../sounds/SoundPlayer.h"
 #include <Windows.h>
 #include <gdiplus.h>
 
@@ -14,6 +15,8 @@ void initializers::init()
 	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
 	Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
+	SoundPlayer::init();
+
 	Splash::LoadImageFromResource();
 	//start off by initalizing the keyboard hook for incoming key presses
 	KeyboardHook::init();
@@ -21,6 +24,7 @@ void initializers::init()
 
 void initializers::deinit()
 {
+	SoundPlayer::deInit();
 	//Shutdown Gdi+
 	Gdiplus::GdiplusShutdown(gdiplusToken);
 }
