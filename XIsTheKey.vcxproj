@@ -19,9 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\init\initializers.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\init\initializers.h" />
     <ClInclude Include="src\hook\KeyboardHook.h" />
     <ClInclude Include="src\splash\Splash.h" />
     <ClInclude Include="src\sounds\SoundPlayer.h" />

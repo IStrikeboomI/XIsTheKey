@@ -24,5 +24,6 @@ namespace SoundPlayer {
         }
         // Free the WAVE resource
         FreeResource(hRes);
+        
 	}
 }

@@ -3,6 +3,7 @@
 #include <memory>
 #include "../sounds/SoundPlayer.h"
 #include "../splash/Splash.h"
+#include "../init/initializers.h"
 //the virtual key code for X key
 static const int X_KEY = 0x58;
 namespace KeyboardHook {
@@ -34,5 +35,6 @@ namespace KeyboardHook {
             DispatchMessage(&msg);
         }
         UnhookWindowsHookEx(hook);
+        initializers::deinit();
     }
 }
