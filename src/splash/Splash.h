@@ -1,7 +1,6 @@
 #pragma once
 #include <Windows.h>
 #include <gdiplus.h>
-#include <string>
 
 #pragma comment (lib,"gdiplus.lib")
 
@@ -107,7 +106,7 @@ namespace Splash {
         int height = img->GetHeight();
 
         //Creates (Layered) Window
-        HWND hwnd = CreateWindowEx(WS_EX_LAYERED | WS_EX_TOPMOST | WS_EX_TRANSPARENT, wc.lpszClassName, wc.lpszMenuName, WS_POPUP, screen.right / 2 - width / 2, screen.bottom / 2 - height / 2, width, height, NULL, 0, wc.hInstance, 0);
+        HWND hwnd = CreateWindowEx(WS_EX_LAYERED | WS_EX_TOPMOST | WS_EX_TRANSPARENT | WS_EX_NOACTIVATE, wc.lpszClassName, wc.lpszMenuName, WS_POPUP, screen.right / 2 - width / 2, screen.bottom / 2 - height / 2, width, height, NULL, 0, wc.hInstance, 0);
         //see if we can create if not then stop program
         if (!hwnd) {
             return;
