@@ -39,6 +39,9 @@
     <Image Include="Resources\icon\icon.ico">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Resources\splash\splash.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\icon\icon.rc">
@@ -50,8 +53,16 @@
     <ResourceCompile Include="Resources\wav\thud.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+    <ResourceCompile Include="Resources\splash\splash.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="Resources\manifest\XIsTheKey.exe.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Resources\wav\thud.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
   </ItemGroup>
 </Project>

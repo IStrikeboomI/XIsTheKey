@@ -33,14 +33,19 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\icon\icon.ico" />
+    <Image Include="Resources\splash\splash.png" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\icon\icon.rc" />
     <ResourceCompile Include="Resources\manifest\manifest.rc" />
+    <ResourceCompile Include="Resources\splash\splash.rc" />
     <ResourceCompile Include="Resources\wav\thud.rc" />
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="Resources\manifest\XIsTheKey.exe.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Resources\wav\thud.wav" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
