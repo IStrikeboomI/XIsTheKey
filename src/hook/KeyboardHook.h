@@ -2,7 +2,7 @@
 #include <Windows.h>
 #include <memory>
 #include "../sounds/SoundPlayer.h"
-#include "../popup/Popup.h"
+#include "../splash/Splash.h"
 //the virtual key code for X key
 static const int X_KEY = 0x58;
 namespace KeyboardHook {
@@ -18,7 +18,7 @@ namespace KeyboardHook {
             //check for X key
             if (pKeyBoard.vkCode == X_KEY) {
                 SoundPlayer::playThud();
-                Popup::popup();
+                Splash::splash();
             }
         }
         return CallNextHookEx(0, nCode, wParam, lParam);

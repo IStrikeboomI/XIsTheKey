@@ -23,7 +23,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\hook\KeyboardHook.h" />
-    <ClInclude Include="src\popup\Popup.h" />
+    <ClInclude Include="src\splash\Splash.h" />
     <ClInclude Include="src\sounds\SoundPlayer.h" />
   </ItemGroup>
   <ItemGroup>

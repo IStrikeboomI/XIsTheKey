@@ -26,7 +26,7 @@
     <ClInclude Include="src\sounds\SoundPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\popup\Popup.h">
+    <ClInclude Include="src\splash\Splash.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
