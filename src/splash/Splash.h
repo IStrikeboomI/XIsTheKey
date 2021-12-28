@@ -5,9 +5,15 @@
 
 #pragma comment (lib,"gdiplus.lib")
 
-static const int CLOSE_TIMER = 11;
+//constant for timer
+static const int FADE_OUT = 12;
+
 //window amount to keep track of which window because we need unique class name to distinguish
 unsigned int windowAmount = 0;
+
+//for fading out the gui
+unsigned int fade_out = 255;
+
 LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 //the X image
 Gdiplus::Bitmap* img = nullptr;
@@ -67,6 +73,8 @@ namespace Splash {
     }
 
 	static void splash() {
+        //redefine fade out for every time this function gets called so it doesn't pulse
+        fade_out = 256;
         //add to window amount
         windowAmount++;
         //initizalie wc
@@ -104,15 +112,13 @@ namespace Splash {
         if (!hwnd) {
             return;
         }
-        //make all red pixels transparent 
-        //this function has to be called for a layered window
-        SetLayeredWindowAttributes(hwnd, RGB(255, 0, 0), 0, LWA_COLORKEY);
 
         //make window visible
         ShowWindow(hwnd, SW_NORMAL);
         UpdateWindow(hwnd);
 
-        SetTimer(hwnd, CLOSE_TIMER, 1000, (TIMERPROC)NULL);
+        //get more transparent every 16 miliseconds
+        SetTimer(hwnd, FADE_OUT, 16, (TIMERPROC)NULL);
 
         //get message
         MSG msg = { nullptr };
@@ -131,16 +137,23 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
     switch (msg) {
     case WM_TIMER: {
         switch (wparam) {
-            case CLOSE_TIMER: {
-                //AnimateWindow(hwnd, 500, AW_HIDE);
-                DestroyWindow(hwnd);
-                KillTimer(hwnd, CLOSE_TIMER);
-                return 0;
+            case FADE_OUT: {
+                //decrement fade out by 8 each time
+                if (fade_out > 0) {
+                    fade_out -= 8;
+                }
+                else {
+                    //kill timer and window when finished fading out
+                    KillTimer(hwnd,FADE_OUT);
+                    DestroyWindow(hwnd);
+                }
+                //make all the red pixels transparent and put opacity to what fade out is equal to
+                SetLayeredWindowAttributes(hwnd, RGB(255,0,0), fade_out, LWA_ALPHA | LWA_COLORKEY);
             }
         }
     }
     case WM_PAINT: {
-        //start paitning
+        //start painting
         hdc = BeginPaint(hwnd, &ps);
 
         //make graphics
