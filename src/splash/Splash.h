@@ -2,10 +2,14 @@
 #include <Windows.h>
 #include <gdiplus.h>
 #include <string>
+
 #pragma comment (lib,"gdiplus.lib")
+
 LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+//the X image
 Gdiplus::Bitmap* img = nullptr;
 namespace Splash {
+    //the image always stays the same so we only have to load it once
     void LoadImageFromResource()
     {
         IStream* pStream = nullptr;
@@ -36,6 +40,7 @@ namespace Splash {
                             {
                                 // pStream now owns the global handle and will invoke GlobalFree on release
                                 hGlobal = nullptr;
+                                //set the image
                                 img = new Gdiplus::Bitmap(pStream);
                             }
                         }
@@ -44,6 +49,7 @@ namespace Splash {
             }
         }
 
+        //CLEAN UP!
         if (pStream)
         {
             pStream->Release();
@@ -58,28 +64,44 @@ namespace Splash {
     }
 	static void splash() {
         //initizalie wc
-        WNDCLASSW wc = { 0 };
-        wc.hbrBackground = (HBRUSH)0;
+        WNDCLASSEX wc = { 0 };
+        //set size
+        wc.cbSize = sizeof(WNDCLASSEX);
+        //background cant be all white because if it is, the gui copies the background making it look bad when you move
+        wc.hbrBackground = CreateSolidBrush(RGB(255, 0, 0));
+        //i don't need winmain if i have GetModuleHandle!
         wc.hInstance = GetModuleHandle(0);
+        //default cursor
         wc.hCursor = LoadCursor(wc.hInstance, IDC_ARROW);
         wc.lpszClassName = L"xisthekey";
         wc.lpfnWndProc = windowProcedure;
         wc.lpszMenuName = L"X Is The Key";
+        //no style
+        wc.style = 0;
         //Adds icon in corner (117 is icon)
         wc.hIcon = (HICON)LoadImageW(wc.hInstance, MAKEINTRESOURCEW(117), IMAGE_ICON, 10, 0, LR_DEFAULTSIZE | LR_SHARED);
 	
         //see if we can register if not then stop program
-        if (!RegisterClassW(&wc)) {
+        if (!RegisterClassEx(&wc)) {
             return;
         }
         //Gets screen to center window
         RECT screen;
         GetWindowRect(GetDesktopWindow(), &screen);
-        int width = (int)((screen.right) / 3);
-        int height = (int)((screen.bottom - screen.top) * (.925));
-        //Creates Window
-        HWND hwnd = CreateWindowEx(WS_EX_LAYERED | WS_EX_TOPMOST, wc.lpszClassName, wc.lpszMenuName, WS_POPUP | WS_VISIBLE, screen.right / 2 - width / 2, screen.bottom / 2 - height / 2, width, height, NULL, 0, wc.hInstance, 0);
-        SetLayeredWindowAttributes(hwnd, Gdiplus::Color::White, 0, LWA_ALPHA);
+        int width = img->GetWidth();
+        int height = img->GetHeight();
+
+        //Creates (Layered) Window
+        HWND hwnd = CreateWindowEx(WS_EX_LAYERED | WS_EX_TOPMOST | WS_EX_TRANSPARENT, wc.lpszClassName, wc.lpszMenuName, WS_POPUP, screen.right / 2 - width / 2, screen.bottom / 2 - height / 2, width, height, NULL, 0, wc.hInstance, 0);
+        //see if we can create if not then stop program
+        if (!hwnd) {
+            return;
+        }
+        //make all red pixels transparent 
+        //this function has to be called for a layered window
+        SetLayeredWindowAttributes(hwnd, RGB(255,0,0), 0, LWA_COLORKEY);
+
+        //make window visible
         ShowWindow(hwnd, SW_SHOWDEFAULT);
         UpdateWindow(hwnd);
         //get message
@@ -100,19 +122,18 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
     case WM_PAINT: {
         //start paitning
         hdc = BeginPaint(hwnd, &ps);
+
         //make graphics
         Gdiplus::Graphics graphics(hdc);
 
+        //use image attributes to make it draw a transparent
         Gdiplus::ImageAttributes attr;
+        //all the white pixels go transparent
         attr.SetColorKey(Gdiplus::Color::White, Gdiplus::Color::White,
             Gdiplus::ColorAdjustTypeBitmap);
 
-        graphics.DrawImage(
-            img,
-            Gdiplus::Rect(0, 0, img->GetWidth(), img->GetHeight()),
-            0, 0, img->GetWidth(), img->GetHeight(),
-            Gdiplus::UnitPixel,
-            &attr);
+        //draw the iamge
+        graphics.DrawImage(img,Gdiplus::Rect(0, 0, img->GetWidth(), img->GetHeight()),0, 0, img->GetWidth(), img->GetHeight(),Gdiplus::UnitPixel,&attr);
 
         //stop painting
         EndPaint(hwnd, &ps);
