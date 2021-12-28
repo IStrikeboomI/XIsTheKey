@@ -5,12 +5,15 @@
 
 #pragma comment (lib,"gdiplus.lib")
 
+static const int CLOSE_TIMER = 11;
+//window amount to keep track of which window because we need unique class name to distinguish
+unsigned int windowAmount = 0;
 LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 //the X image
 Gdiplus::Bitmap* img = nullptr;
 namespace Splash {
     //the image always stays the same so we only have to load it once
-    void LoadImageFromResource()
+    static void LoadImageFromResource()
     {
         IStream* pStream = nullptr;
         HGLOBAL hGlobal = nullptr;
@@ -62,7 +65,10 @@ namespace Splash {
             hGlobal = nullptr;
         }
     }
+
 	static void splash() {
+        //add to window amount
+        windowAmount++;
         //initizalie wc
         WNDCLASSEX wc = { 0 };
         //set size
@@ -73,7 +79,8 @@ namespace Splash {
         wc.hInstance = GetModuleHandle(0);
         //default cursor
         wc.hCursor = LoadCursor(wc.hInstance, IDC_ARROW);
-        wc.lpszClassName = L"xisthekey";
+        //we add which window we are to class name so we can differnetiate
+        wc.lpszClassName = L"xisthekey" + windowAmount;
         wc.lpfnWndProc = windowProcedure;
         wc.lpszMenuName = L"X Is The Key";
         //no style
@@ -104,6 +111,9 @@ namespace Splash {
         //make window visible
         ShowWindow(hwnd, SW_SHOWDEFAULT);
         UpdateWindow(hwnd);
+
+        SetTimer(hwnd, CLOSE_TIMER, 1000, (TIMERPROC)NULL);
+
         //get message
         MSG msg = { nullptr };
         //keep getting and handling messages until no more
@@ -119,6 +129,15 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
     HDC hdc;
 
     switch (msg) {
+    case WM_TIMER: {
+        switch (wparam) {
+            case CLOSE_TIMER: {
+                DestroyWindow(hwnd);
+                KillTimer(hwnd, CLOSE_TIMER);
+                return 0;
+            }
+        }
+    }
     case WM_PAINT: {
         //start paitning
         hdc = BeginPaint(hwnd, &ps);
