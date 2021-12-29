@@ -10,12 +10,12 @@ static const int FADE_OUT = 12;
 //window amount to keep track of which window because we need unique class name to distinguish
 unsigned int windowAmount = 0;
 
-//for fading out the gui
-unsigned int fade_out = 255;
 
 LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 //the X image
 Gdiplus::Bitmap* img = nullptr;
+
+unsigned int fade_out;
 namespace Splash {
     //the image always stays the same so we only have to load it once
     static void LoadImageFromResource()
@@ -72,7 +72,6 @@ namespace Splash {
     }
 
 	static void splash() {
-        //redefine fade out for every time this function gets called so it doesn't pulse
         fade_out = 256;
         //add to window amount
         windowAmount++;
@@ -136,22 +135,22 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
     switch (msg) {
     case WM_TIMER: {
         switch (wparam) {
-            case FADE_OUT: {
-                //decrement fade out by 8 each time
-                if (fade_out > 0) {
-                    fade_out -= 8;
-                }
-                else {
-                    //kill timer and window when finished fading out
-                    KillTimer(hwnd,FADE_OUT);
-                    DestroyWindow(hwnd);
-                }
-                //make all the red pixels transparent and put opacity to what fade out is equal to
-                SetLayeredWindowAttributes(hwnd, RGB(255,0,0), fade_out, LWA_ALPHA | LWA_COLORKEY);
+        case FADE_OUT: {
+            //decrement fade out by 8 each time
+            if (fade_out > 0) {
+                fade_out -= 8;
             }
+            else {
+                //kill timer and window when finished fading out
+                KillTimer(hwnd, FADE_OUT);
+                DestroyWindow(hwnd);
+            }
+            //make all the red pixels transparent and put opacity to what fade out is equal to
+            SetLayeredWindowAttributes(hwnd, RGB(255, 0, 0), fade_out, LWA_ALPHA | LWA_COLORKEY);
+        }
         }
     }
-    case WM_PAINT: {
+    case WM_ERASEBKGND: {
         //start painting
         hdc = BeginPaint(hwnd, &ps);
 
@@ -165,11 +164,10 @@ LRESULT CALLBACK windowProcedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
             Gdiplus::ColorAdjustTypeBitmap);
 
         //draw the iamge
-        graphics.DrawImage(img,Gdiplus::Rect(0, 0, img->GetWidth(), img->GetHeight()),0, 0, img->GetWidth(), img->GetHeight(),Gdiplus::UnitPixel,&attr);
+        graphics.DrawImage(img, Gdiplus::Rect(0, 0, img->GetWidth(), img->GetHeight()), 0, 0, img->GetWidth(), img->GetHeight(), Gdiplus::UnitPixel, &attr);
 
         //stop painting
         EndPaint(hwnd, &ps);
-     
     }
     default:return DefWindowProcW(hwnd, msg, wparam, lparam);
     }
