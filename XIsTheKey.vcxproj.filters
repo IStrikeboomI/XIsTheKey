@@ -48,6 +48,9 @@
     <Image Include="Resources\splash\splash.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="README Resources\images\gifs\demonstration.gif">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\icon\icon.rc">

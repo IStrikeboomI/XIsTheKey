@@ -34,6 +34,7 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="README Resources\images\gifs\demonstration.gif" />
     <Image Include="Resources\icon\icon.ico" />
     <Image Include="Resources\splash\splash.png" />
   </ItemGroup>
