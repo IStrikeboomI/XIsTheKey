@@ -1,6 +1,5 @@
 #pragma once
 #include <Windows.h>
-#include <memory>
 #include "../sounds/SoundPlayer.h"
 #include "../splash/Splash.h"
 #include "../init/initializers.h"
